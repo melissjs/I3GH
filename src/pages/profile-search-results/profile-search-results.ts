@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { GithubServiceProvider } from '../../providers/github-service/github.service'
-
-/**
- * Generated class for the ProfileSearchResultsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { GithubServiceProvider } from '../../providers/github-service/github.service';
+import { User } from '../../models/user.interface';
+import { Repository } from '../../models/repository.interface';
 
 @IonicPage()
 @Component({
@@ -17,12 +12,17 @@ import { GithubServiceProvider } from '../../providers/github-service/github.ser
 export class ProfileSearchResultsPage {
 
   userName: string;
+  user: User;
+  repositories: Repository[];
 
   constructor(private github: GithubServiceProvider, private navCtrl: NavController, private navParams: NavParams) {
   }
 
   getUserInformation(): void {
-    this.github.mockGetUserInformation(this.userName).subscribe(data => console.log(data));
+    this.github.getUserInformation(this.userName).subscribe((data: User) => this.user = data);
+    this.github.getRepositoryInformation(this.userName).subscribe((data: Repository[]) => this.repositories = data);
+    // this.github.mockGetUserInformation(this.userName).subscribe((data: User) => this.user = data);
+    // this.github.mockGetRepositoryInformation(this.userName).subscribe((data: Repository[]) => this.repositories = data);
   }
 
   ionViewWillLoad() {
